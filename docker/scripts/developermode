@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd /var/www/html
+php composer.phar install --ignore-platform-reqs -n
+php composer.phar clear-cache
+php artisan storage:link
+php artisan config:clear
+php artisan view:clear
+mkdir -p /var/www/html/storage/logs
+mkdir -p /var/www/html/storage/framework/{sessions,views,cache,testing}
+mkdir -p /var/www/html/storage/framework/cache/data
+chmod -R 777 /var/www/html/storage/framework/
+chmod -R ug+rwx storage bootstrap/cache
+printenv | grep -v "no_proxy" >>/etc/environment
+/usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf

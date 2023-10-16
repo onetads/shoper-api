@@ -1,0 +1,2 @@
+* * * * * www-data /usr/local/bin/php /var/www/html/artisan schedule:run
+# keep extra empty line here 
