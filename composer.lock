@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa322c53454393ed775cfe4807d54a50",
+    "content-hash": "7c1db1d5b6c706e634c770d7322d085d",
     "packages": [
         {
             "name": "brick/math",
@@ -364,6 +364,46 @@
                 }
             ],
             "time": "2023-08-10T19:36:49+00:00"
+        },
+        {
+            "name": "dreamcommerce/shop-appstore-lib",
+            "version": "0.1.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dreamcommerce/shop-appstore-lib.git",
+                "reference": "e307589c694c24b3219cbb4f605917d49cb78f62"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dreamcommerce/shop-appstore-lib/zipball/e307589c694c24b3219cbb4f605917d49cb78f62",
+                "reference": "e307589c694c24b3219cbb4f605917d49cb78f62",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DreamCommerce\\": "src/DreamCommerce"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Przemysław eRIZ Pawliczuk",
+                    "email": "przemyslaw.pawliczuk@shoper.pl"
+                }
+            ],
+            "description": "SDK for Dreamcommerce based shops REST-API",
+            "support": {
+                "issues": "https://github.com/dreamcommerce/shop-appstore-lib/issues",
+                "source": "https://github.com/dreamcommerce/shop-appstore-lib/tree/0.1.10"
+            },
+            "time": "2015-05-15T09:47:13+00:00"
         },
         {
             "name": "egulias/email-validator",
