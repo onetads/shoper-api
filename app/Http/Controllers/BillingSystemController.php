@@ -8,6 +8,7 @@ use DreamCommerce\Client;
 use DreamCommerce\Exception\HandlerException;
 use DreamCommerce\Handler;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class BillingSystemController extends Controller
@@ -97,25 +98,63 @@ class BillingSystemController extends Controller
         DB::commit();
     }
 
-    public function billingInstallHandler(\ArrayObject $arguments)
+    /**
+     * @param \ArrayObject $arguments
+     * @return void
+     * @throws \Exception
+     */
+    public function billingInstallHandler(\ArrayObject $arguments): void
     {
-        // TODO:: implement
+        /** @var Shop $shop */
+        $shop = Shop::query()
+            ->where('shop', $arguments['shop'])
+            ->firstOrFail();
+
+        $shop->billing()->create();
     }
 
 
-    public function upgradeHandler(\ArrayObject $arguments)
+    /**
+     * @param \ArrayObject $arguments
+     * @return void
+     */
+    public function upgradeHandler(\ArrayObject $arguments): void
     {
-        // TODO:: implement
+        /** @var Shop $shop */
+        $shop = Shop::query()
+            ->where('shop', $arguments['shop'])
+            ->firstOrFail();
+
+        $shop->update(['version' => $arguments['application_version']]);
     }
 
-    public function uninstallHandler(\ArrayObject $arguments)
+    public function uninstallHandler(\ArrayObject $arguments): void
     {
-        // TODO:: implement
+        /** @var Shop $shop */
+        $shop = Shop::query()
+            ->where('shop', $arguments['shop'])
+            ->firstOrFail();
+
+        $shop->update(['installed' => false]);
+
+        $shop->access_token()->delete();
     }
 
-    public function billingSubscriptionHandler(\ArrayObject $arguments)
+    /**
+     * @param \ArrayObject $arguments
+     * @return void
+     */
+    public function billingSubscriptionHandler(\ArrayObject $arguments): void
     {
-        // TODO:: implement
+        /** @var Shop $shop */
+        $shop = Shop::query()
+            ->where('shop', $arguments['shop'])
+            ->firstOrFail();
+
+        $expiresAt = Carbon::createFromTimestamp(strtotime($arguments['subscription_end_time']))
+            ->format('Y-m-d H:i:s');
+
+        $shop->subscription()->create(['expires_at' => $expiresAt]);
     }
 
     private function getHash($payload): string
