@@ -82,3 +82,9 @@ RUN php artisan storage:link && \
     php artisan config:clear && \
     php artisan view:clear && \
     chown -R www-data:www-data /var/www/html
+
+### DEVELOPMENT APPLICATION IMAGE
+FROM base as dev-application
+
+# Disable OPCache
+RUN sed -i 's/opcache.enable=1/opcache.enable=0/g' /usr/local/etc/php/conf.d/opcache.ini
