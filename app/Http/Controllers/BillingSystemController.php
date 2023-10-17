@@ -167,25 +167,4 @@ class BillingSystemController extends Controller
 
         $shop->subscription()->create(['expires_at' => $expiresAt]);
     }
-
-    private function getHash($payload): string
-    {
-        $providedHash = $payload['hash'];
-        unset($payload['hash']);
-
-        // sort params
-        ksort($payload);
-
-        $processedPayload = "";
-
-        foreach($payload as $k => $v){
-            $processedPayload .= '&'.$k.'='.$v;
-        }
-
-        $processedPayload = substr($processedPayload, 1);
-
-        $computedHash = hash_hmac('sha512', $processedPayload, '');
-
-        return $computedHash;
-    }
 }
