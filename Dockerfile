@@ -14,7 +14,7 @@ RUN apt-get -y install --fix-missing apt-utils dpkg build-essential \
     libxslt1-dev libxslt1.1 iproute2 libzstd1 libzstd-dev
 
 RUN pecl install imagick && docker-php-ext-enable imagick && \
-    pecl install redis && docker-php-ext-enable redis && \      
+    pecl install redis && docker-php-ext-enable redis && \
     docker-php-ext-install pdo_mysql && \
     docker-php-ext-install mysqli && \
     docker-php-ext-install -j$(nproc) intl && \
@@ -28,7 +28,7 @@ RUN pecl install imagick && docker-php-ext-enable imagick && \
     docker-php-ext-install xsl && \
     docker-php-ext-install opcache && \
     docker-php-source delete
-    
+
 RUN apt-get -y remove build-essential && apt-get autoremove && apt-get clean
 
 ENV TZ=Etc/UTC
@@ -81,5 +81,4 @@ RUN php artisan storage:link && \
     chmod -R ug+rwx storage bootstrap/cache && \
     php artisan config:clear && \
     php artisan view:clear && \
-    chmod -R +x /var/www/html/scripts && \
     chown -R www-data:www-data /var/www/html
