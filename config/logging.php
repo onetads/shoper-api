@@ -126,6 +126,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'dreamcommerce' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/dreamcommerce.log'),
+            'days' => 14,
+        ]
     ],
 
 ];

@@ -8,8 +8,10 @@ use DreamCommerce\Client;
 use DreamCommerce\Exception\HandlerException;
 use DreamCommerce\Handler;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BillingSystemController extends Controller
 {
@@ -21,33 +23,42 @@ class BillingSystemController extends Controller
      * @return void
      * @throws \Exception
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $entrypoint = $request->get('shop_url');
 
         try {
-            $this->handler = new Handler(
-                $entrypoint,
-                config('app-store.app_id'),
-                config('app-store.app_secret'),
-                config('app-store.appstore_secret')
-            );
+            try {
+                $this->handler = new Handler(
+                    $entrypoint,
+                    config('app-store.app_id'),
+                    config('app-store.app_secret'),
+                    config('app-store.appstore_secret')
+                );
 
-            // subscribe to particular events
-            $this->handler->subscribe('install', [$this, 'installHandler']);
-            $this->handler->subscribe('upgrade', [$this, 'upgradeHandler']);
-            $this->handler->subscribe('billing_install', [$this, 'billingInstallHandler']);
-            $this->handler->subscribe('billing_subscription', [$this, 'billingSubscriptionHandler']);
-            $this->handler->subscribe('uninstall', [$this, 'uninstallHandler']);
+                // subscribe to particular events
+                $this->handler->subscribe('install', [$this, 'installHandler']);
+                $this->handler->subscribe('upgrade', [$this, 'upgradeHandler']);
+                $this->handler->subscribe('billing_install', [$this, 'billingInstallHandler']);
+                $this->handler->subscribe('billing_subscription', [$this, 'billingSubscriptionHandler']);
+                $this->handler->subscribe('uninstall', [$this, 'uninstallHandler']);
 
-            $this->handler->dispatch();
-        } catch (HandlerException $e) {
-            if ($e->getCode() == HandlerException::HASH_FAILED) {
-                throw new \Exception('Payload hash verification failed', 0, $e);
-            } else {
-                throw new \Exception('Handler initialization failed', 0, $e);
+                $this->handler->dispatch();
+            } catch (HandlerException $e) {
+                if ($e->getCode() == HandlerException::HASH_FAILED) {
+                    throw new \Exception('Payload hash verification failed', 0, $e);
+                } else {
+                    throw new \Exception('Handler initialization failed', 0, $e);
+                }
             }
+        } catch (\Exception $e) {
+            Log::channel('dreamcommerce')->error($e->getMessage());
+
+            return \response($e->getMessage(), 500);
         }
+
+
+        return \response('success');
     }
 
     /**
