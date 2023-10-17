@@ -10,6 +10,13 @@ class Shop extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'shop',
+        'shop_url',
+        'version',
+        'installed'
+    ];
+
     public function configuration(): HasOne
     {
         return $this->hasOne(ShopConfiguration::class, 'shop_id');

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccessToken;
+use App\Models\Shop;
+use DreamCommerce\Client;
 use DreamCommerce\Exception\HandlerException;
 use DreamCommerce\Handler;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BillingSystemController extends Controller
 {
@@ -36,38 +40,102 @@ class BillingSystemController extends Controller
             $this->handler->subscribe('uninstall', [$this, 'uninstallHandler']);
 
             $this->handler->dispatch();
-        } catch (HandlerException $ex) {
-            if ($ex->getCode() == HandlerException::HASH_FAILED) {
-                throw new \Exception('Payload hash verification failed', 0, $ex);
+        } catch (HandlerException $e) {
+            if ($e->getCode() == HandlerException::HASH_FAILED) {
+                throw new \Exception('Payload hash verification failed', 0, $e);
             } else {
-                throw new \Exception('Handler initialization failed', 0, $ex);
+                throw new \Exception('Handler initialization failed', 0, $e);
             }
         }
     }
 
-    public function installHandler(array $arguments)
+    /**
+     * @param \ArrayObject $arguments
+     * @return void
+     * @throws \DreamCommerce\Exception\ClientException
+     */
+    public function installHandler(\ArrayObject $arguments): void
+    {
+        try {
+            DB::beginTransaction();
+
+            /** @var Shop $shop */
+            $shop = Shop::firstOrNew([
+                'shop' => $arguments['shop']
+            ]);
+
+            $shop->fill([
+                'shop_url' => $arguments['shop_url'],
+                'version' => $arguments['application_version'],
+                'installed' => true
+            ]);
+
+            $shop->save();
+
+            /** @var Client $client */
+            $client = $arguments['client'];
+
+            $tokenData = $client->getToken($arguments['auth_code']);
+
+            $accessToken = AccessToken::firstOrNew([
+                'shop_id' => $shop->id
+            ]);
+
+            $accessToken->fill([
+                'expires_at' => now()->addSeconds($tokenData['expires_in'])->format('Y-m-d H:i:s'),
+                'access_token' => $tokenData['access_token'],
+                'refresh_token' => $tokenData['refresh_token']
+            ]);
+
+            $accessToken->save();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            throw $e;
+        }
+
+        DB::commit();
+    }
+
+    public function billingInstallHandler(\ArrayObject $arguments)
     {
         // TODO:: implement
     }
 
-    public function billingInstallHandler(array $arguments)
+
+    public function upgradeHandler(\ArrayObject $arguments)
     {
         // TODO:: implement
     }
 
-
-    public function upgradeHandler(array $arguments)
+    public function uninstallHandler(\ArrayObject $arguments)
     {
         // TODO:: implement
     }
 
-    public function uninstallHandler(array $arguments)
+    public function billingSubscriptionHandler(\ArrayObject $arguments)
     {
         // TODO:: implement
     }
 
-    public function billingSubscriptionHandler(array $arguments)
+    private function getHash($payload): string
     {
-        // TODO:: implement
+        $providedHash = $payload['hash'];
+        unset($payload['hash']);
+
+        // sort params
+        ksort($payload);
+
+        $processedPayload = "";
+
+        foreach($payload as $k => $v){
+            $processedPayload .= '&'.$k.'='.$v;
+        }
+
+        $processedPayload = substr($processedPayload, 1);
+
+        $computedHash = hash_hmac('sha512', $processedPayload, '');
+
+        return $computedHash;
     }
 }

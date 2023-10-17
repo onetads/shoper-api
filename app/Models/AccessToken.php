@@ -9,4 +9,10 @@ class AccessToken extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'expires_at',
+        'access_token',
+        'refresh_token',
+        'shop_id'
+    ];
 }
