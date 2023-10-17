@@ -2,7 +2,8 @@
 trap ctrl_c INT
 
 function ctrl_c() {
-    docker-compose stop
+    docker compose stop
 }
 
-docker-compose --env-file .env.docker-dev up
+docker compose --env-file .env.docker-dev up
+
