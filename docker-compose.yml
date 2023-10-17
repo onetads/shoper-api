@@ -1,0 +1,44 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    container_name: ras-shoper
+    env_file: .env.docker-dev
+    entrypoint: /developermode
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+      - cache
+    volumes:
+      - .:/var/www/html
+
+  cache:
+    container_name: ras-redis
+    image: redis:7.2-alpine
+
+  db:
+    image: mariadb:10.11
+    container_name: ras-mariadb
+    volumes:
+      - ./docker_mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=ras
+      - MYSQL_PASSWORD=ras
+      - MYSQL_USER=ras
+      - MYSQL_DATABASE=ras
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: ras-phpmyadmin
+    restart: always
+    ports:
+      - 8088:80
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=ras
+      - PMA_PASSWORD=ras
+      - UPLOAD_LIMIT=2048M
