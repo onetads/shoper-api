@@ -37,22 +37,10 @@ class BillingSystemController extends Controller
 
             $this->handler->dispatch();
         } catch (HandlerException $ex) {
-            throw new \Exception('Handler initialization failed', 0, $ex);
-        }
-    }
-
-
-    /**
-     * @return void
-     * @throws \Exception
-     */
-    public function dispatch(): void
-    {
-        try {
-            $this->handler->dispatch();
-        } catch (HandlerException $ex) {
             if ($ex->getCode() == HandlerException::HASH_FAILED) {
                 throw new \Exception('Payload hash verification failed', 0, $ex);
+            } else {
+                throw new \Exception('Handler initialization failed', 0, $ex);
             }
         }
     }
