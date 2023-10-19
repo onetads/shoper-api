@@ -1,0 +1,42 @@
+stages:
+  - deploy_fingoweb
+  - owasp
+
+include:
+  - project: 'devops_public/autodeploy'
+    ref: main
+    file: '/template.yml'
+  - project: 'devops_public/ci-snippets'
+    ref: master
+    file: '/snippets.yml'
+
+# FINGOWEB-DEV DEPLOY
+deploy:
+  extends: .deploy_fingoweb_dev_template
+  stage: deploy_fingoweb
+  only:
+    - master
+    - staging
+  variables:
+    PROJECT_NAME: shoper-plugin
+    MAIN_DOMAIN: fingoweb.it
+    DEPLOY_BRANCH: ${CI_COMMIT_REF_NAME}
+    URL_PATH: ${DEPLOY_BRANCH}-${PROJECT_NAME}.${MAIN_DOMAIN}
+    BUILD_COMMANDS: "php8.2 composer.phar -n install && php8.2 artisan migrate --force && php8.2 artisan storage:link"
+
+# OWASP
+scan_code:
+  extends: .scanCode_template
+  stage: owasp
+  when: manual
+  only:
+    - master
+  before_script:
+    - php8.2 composer.phar -n install --ignore-platform-reqs
+
+owasp_dependency_check:
+  extends: .owaspDependencyCheck_template
+  stage: owasp
+  when: manual
+  only:
+    - master
