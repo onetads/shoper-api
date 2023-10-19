@@ -18,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'install', 'controller' => PageController::class], function (){
+Route::group(['prefix' => 'configure', 'controller' => PageController::class], function (){
     Route::get('/', 'index')->name('install.index');
     Route::post('/', 'save')->name('install.save');
 });

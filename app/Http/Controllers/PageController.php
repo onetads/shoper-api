@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\InstallShopRequest;
+use App\Http\Requests\ConfigureShopRequest;
 use App\Models\Shop;
 use App\Models\ShopConfiguration;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +18,7 @@ class PageController extends Controller
         return \view('install', ['shop' => $shop]);
     }
 
-    public function save(InstallShopRequest $request): RedirectResponse
+    public function save(ConfigureShopRequest $request): RedirectResponse
     {
         $externalShopId = $request->get('shop_external_id');
         $websiteId = $request->get('website_id');
