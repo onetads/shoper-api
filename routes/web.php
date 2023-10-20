@@ -19,6 +19,6 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'configure', 'controller' => PageController::class], function (){
-    Route::get('/', 'index')->name('install.index');
-    Route::post('/', 'save')->name('install.save');
+    Route::get('/', 'index')->name('configure.index');
+    Route::post('/', 'save')->name('configure.save');
 });

@@ -15,7 +15,7 @@ class PageController extends Controller
     {
         $shop = $request->get('shop');
 
-        return \view('install', ['shop' => $shop]);
+        return \view('configure', ['shop' => $shop]);
     }
 
     public function save(ConfigureShopRequest $request): RedirectResponse

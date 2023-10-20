@@ -1,6 +1,6 @@
 <div>
     <div>
-        <form action="{{route('install.save')}}" method="post">
+        <form action="{{route('configure.save')}}" method="post">
             @csrf
             <label for="website_id">
                 WebsiteId
