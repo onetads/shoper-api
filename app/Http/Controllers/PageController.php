@@ -18,9 +18,9 @@ class PageController extends Controller
     {
         /** @var Shop $shop */
         $shop = Shop::where('shop', '=', $request->get('shop'))->first();
-        $shopAccessToken = $shop->access_token->access_token;
+        $shopAccessToken = $shop->access_token()->first()->access_token;
         try {
-            $dreamCommerceService = new DreamCommerceService($shop->shop_url, $shopAccessToken);
+            $dreamCommerceService = new DreamCommerceService($shop->shop_url, $shopAccessToken, $shop);
             $metaFields = $dreamCommerceService->getMetaFields();
             $websiteId = $metaFields->where('key', '=', DreamCommerceService::NAME_FOR_META_FIELD_WEBSITE_ID) ?? "";
             $substituteProduct = $metaFields->where('key', '=', DreamCommerceService::NAME_FOR_META_FIELD_SUBSTITUTE_PRODUCT);
@@ -49,11 +49,12 @@ class PageController extends Controller
             ]
         );
 
-        $shopAccessToken = $shop->access_token->access_token;
+        $shopAccessToken = $shop->access_token()->first()->access_token;
         try {
             $dreamCommerceService = new DreamCommerceService(
                 $shop->shop_url,
-                $shopAccessToken
+                $shopAccessToken,
+                $shop
             );
             $dreamCommerceService->createMetaFields(
                 $websiteId,
