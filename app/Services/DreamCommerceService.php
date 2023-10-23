@@ -20,7 +20,6 @@ class DreamCommerceService
 {
 
     protected Client $client;
-
     private const ACCESS_TOKEN_RENEW_DIFF_IN_DAYS = 1;
     private const NAME_SPACE_FOR_ONET_ADS = 'OnetAds';
     public const NAME_FOR_META_FIELD_WEBSITE_ID = 'website_id';
@@ -33,10 +32,6 @@ class DreamCommerceService
         protected ?Shop $shop = null
     )
     {
-        if (Carbon::parse($shop->access_token->expires_at)->diffInDays(Carbon::now()) < self::ACCESS_TOKEN_RENEW_DIFF_IN_DAYS) {
-            $this->refreshToken($shop);
-        }
-
         try {
             $this->client = new Client(
                 $entryPoint,
@@ -49,6 +44,11 @@ class DreamCommerceService
         }
 
         $this->client->setAccessToken($accessToken);
+
+        if (Carbon::parse($shop->access_token()->first()->expires_at)->diffInDays(Carbon::now()) < self::ACCESS_TOKEN_RENEW_DIFF_IN_DAYS) {
+            $this->refreshToken($shop);
+        }
+
     }
 
     public function createMetaFields(string $websiteId, bool $substituteProduct): void
@@ -101,7 +101,7 @@ class DreamCommerceService
 
     public function refreshToken(Shop $shop): void
     {
-        $refreshToken = $shop->access_token->refresh_token;
+        $refreshToken = $shop->access_token()->first()->refresh_token;
         $tokenData = $this->client->getToken($refreshToken);
 
         $accessToken = AccessToken::firstOrNew([
