@@ -4,13 +4,13 @@
             @csrf
             <label for="website_id">
                 WebsiteId
-                <input type="text" id="website_id" name="website_id" max="128">
+                <input type="text" id="website_id" name="website_id" max="128" value="{{$websiteId}}">
             </label>
-            <input type="hidden" value="{{$shop}}" name="shop_external_id">
+            <input type="hidden" value="{{$shop->shop}}" name="shop_external_id">
             <br>
             <label for="substitute_product">
                 Podmieniać produkt?
-                <input type="checkbox" id="substitute_product" name="substitute_product">
+                <input type="checkbox" id="substitute_product" name="substitute_product" checked="{{$substitute_product}}">
             </label>
             <input type="submit">
             @if($errors->any())
