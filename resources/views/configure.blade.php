@@ -4,7 +4,7 @@
             @csrf
             <label for="website_id">
                 WebsiteId
-                <input type="text" id="website_id" name="website_id" max="128" value="{{$websiteId ?? ""}}">
+                <input type="text" id="website_id" name="website_id" max="128" value="{{$websiteId ?? ''}}">
             </label>
             <input type="hidden" value="{{$shop->shop}}" name="shop_external_id">
             <br>
