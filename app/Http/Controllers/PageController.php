@@ -18,7 +18,7 @@ class PageController extends Controller
     {
         /** @var Shop $shop */
         $shop = Shop::where('shop', '=', $request->get('shop'))->first();
-        $shopAccessToken = $shop->access_token()->access_token;
+        $shopAccessToken = $shop->access_token->access_token;
         try {
             $dreamCommerceService = new DreamCommerceService($shop->shop_url, $shopAccessToken);
             $metaFields = $dreamCommerceService->getMetaFields();
@@ -49,7 +49,7 @@ class PageController extends Controller
             ]
         );
 
-        $shopAccessToken = $shop->access_token()->access_token;
+        $shopAccessToken = $shop->access_token->access_token;
         try {
             $dreamCommerceService = new DreamCommerceService(
                 $shop->shop_url,
