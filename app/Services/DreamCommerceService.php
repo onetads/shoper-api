@@ -119,7 +119,6 @@ class DreamCommerceService
         return collect($dataToReturn);
     }
 
-
     public function refreshToken(Shop $shop): void
     {
         $refreshToken = $shop->access_token()->first()->refresh_token;
