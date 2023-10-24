@@ -22,8 +22,8 @@ class PageController extends Controller
         try {
             $dreamCommerceService = new DreamCommerceService($shop->shop_url, $shopAccessToken, $shop);
             $metaFields = $dreamCommerceService->getMetaFields();
-            $websiteId = $metaFields->where('key', '=', DreamCommerceService::NAME_FOR_META_FIELD_WEBSITE_ID) ?? "";
-            $substituteProduct = $metaFields->where('key', '=', DreamCommerceService::NAME_FOR_META_FIELD_SUBSTITUTE_PRODUCT);
+            $websiteId = $metaFields->get(DreamCommerceService::NAME_FOR_META_FIELD_WEBSITE_ID);
+            $substituteProduct = (bool) $metaFields->get(DreamCommerceService::NAME_FOR_META_FIELD_SUBSTITUTE_PRODUCT);
         } catch (DreamCommerceException $e) {
             return \response($e->getMessage(), 500);
         }
