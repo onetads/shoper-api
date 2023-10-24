@@ -95,9 +95,30 @@ class DreamCommerceService
 
     public function getMetaFields(): Collection
     {
-        $metaFields = new Metafield($this->client);
-        return collect($metaFields->filters(['namespace' => self::NAME_SPACE_FOR_ONET_ADS])->get());
+        $namespace = self::NAME_SPACE_FOR_ONET_ADS;
+
+        $metaFields = (new Metafield($this->client))->filters(['namespace' => $namespace])->get()->getArrayCopy();
+        $metaFieldsData = collect($metaFields)->mapWithKeys(function ($metaField) {
+            return [$metaField['key'] => $metaField['metafield_id']];
+        });
+
+        $metaFieldValues = (new MetafieldValue($this->client))->filters(['metafield_id' => $metaFieldsData])->get('system', 'all');
+        $metaFieldsValuesCollection = collect($metaFieldValues)->get('list');
+
+        $dataToReturn = [];
+        foreach ($metaFieldsData as $key => $value) {
+            $matchingItem = collect($metaFieldsValuesCollection)->first(function ($item) use ($value) {
+                return $item['metafield_id'] == $value;
+            });
+
+            if ($matchingItem) {
+                $dataToReturn[$key] = $matchingItem['value'];
+            }
+        }
+
+        return collect($dataToReturn);
     }
+
 
     public function refreshToken(Shop $shop): void
     {
