@@ -22,6 +22,7 @@ class DreamCommerceService
     protected Client $client;
     private const ACCESS_TOKEN_RENEW_DIFF_IN_DAYS = 1;
     private const NAME_SPACE_FOR_ONET_ADS = 'OnetAds';
+    private const NAME_FOR_OBJECT_IN_META_FIELDS = 'system';
     public const NAME_FOR_META_FIELD_WEBSITE_ID = 'website_id';
     public const NAME_FOR_META_FIELD_SUBSTITUTE_PRODUCT = 'substitute_product';
 
@@ -60,7 +61,8 @@ class DreamCommerceService
                 'key' => self::NAME_FOR_META_FIELD_WEBSITE_ID,
                 'type' => Metafield::TYPE_STRING,
             ];
-            $metaFileId = $metaField->post($data);
+
+            $metaFileId = $metaField->post(self::NAME_FOR_OBJECT_IN_META_FIELDS, $data);
 
             $metaFieldValue = new MetafieldValue($this->client);
             $data = [
@@ -69,7 +71,7 @@ class DreamCommerceService
                 'value' => $websiteId
             ];
 
-            $metaFieldValue->post($data);
+            $metaFieldValue->post(self::NAME_FOR_OBJECT_IN_META_FIELDS, $data);
 
             $metaField = new Metafield($this->client);
             $data = [
@@ -77,7 +79,7 @@ class DreamCommerceService
                 'key' => self::NAME_FOR_META_FIELD_SUBSTITUTE_PRODUCT,
                 'type' => Metafield::TYPE_INT,
             ];
-            $metaFileId = $metaField->post($data);
+            $metaFileId = $metaField->post(self::NAME_FOR_OBJECT_IN_META_FIELDS, $data);
 
             $metaFieldValue = new MetafieldValue($this->client);
             $data = [
@@ -86,7 +88,7 @@ class DreamCommerceService
                 'value' => $substituteProduct ? 1 : 0
             ];
 
-            $metaFieldValue->post($data);
+            $metaFieldValue->post(self::NAME_FOR_OBJECT_IN_META_FIELDS, $data);
         } catch (\Exception $e) {
             Log::channel('dreamcommerce')->error($e->getMessage());
             throw new DreamCommerceException($e->getMessage());
