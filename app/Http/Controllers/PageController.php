@@ -56,14 +56,25 @@ class PageController extends Controller
                 $shopAccessToken,
                 $shop
             );
-            $dreamCommerceService->createMetaFields(
-                $websiteId,
-                $substituteProduct
-            );
+            if (!$dreamCommerceService->checkMetaFieldsExists()) {
+                $dreamCommerceService->createMetaFields(
+                    $websiteId,
+                    $substituteProduct
+                );
+            } else {
+                $metaFieldsIds = $dreamCommerceService->getMetaFields(true)->toArray();
+                $mappedMetaFieldsValues = $dreamCommerceService->mapNewMetaFieldsValuesToIds(
+                    $metaFieldsIds,
+                    $websiteId,
+                    $substituteProduct
+                );
+
+                $dreamCommerceService->updateMetaFieldsValues($mappedMetaFieldsValues);
+            }
         } catch (DreamCommerceException $exception) {
             return \response($exception->getMessage(), 500);
         }
 
-        return redirect()->back()->with(['success' => true]);
+        return redirect(route('configure.index', ['shop' => $shop->shop]))->with(['success' => true]);
     }
 }
