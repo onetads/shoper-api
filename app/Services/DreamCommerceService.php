@@ -24,7 +24,6 @@ class DreamCommerceService
     private const NAME_SPACE_FOR_ONET_ADS = 'OnetAds';
     private const NAME_FOR_OBJECT_IN_META_FIELDS = 'system';
     public const NAME_FOR_META_FIELD_WEBSITE_ID = 'website_id';
-    public const NAME_FOR_META_FIELD_SUBSTITUTE_PRODUCT = 'substitute_product';
 
 
     public function __construct(
@@ -52,7 +51,7 @@ class DreamCommerceService
 
     }
 
-    public function createMetaFields(string $websiteId, bool $substituteProduct): void
+    public function createMetaFields(string $websiteId): void
     {
         try {
             $metaField = new Metafield($this->client);
@@ -69,23 +68,6 @@ class DreamCommerceService
                 'metafield_id' => $metaFileId,
                 'object_id' => '1',
                 'value' => $websiteId
-            ];
-
-            $metaFieldValue->post(self::NAME_FOR_OBJECT_IN_META_FIELDS, $data);
-
-            $metaField = new Metafield($this->client);
-            $data = [
-                'namespace' => self::NAME_SPACE_FOR_ONET_ADS,
-                'key' => self::NAME_FOR_META_FIELD_SUBSTITUTE_PRODUCT,
-                'type' => Metafield::TYPE_INT,
-            ];
-            $metaFileId = $metaField->post(self::NAME_FOR_OBJECT_IN_META_FIELDS, $data);
-
-            $metaFieldValue = new MetafieldValue($this->client);
-            $data = [
-                'metafield_id' => $metaFileId,
-                'object_id' => '1',
-                'value' => $substituteProduct ? 1 : 0
             ];
 
             $metaFieldValue->post(self::NAME_FOR_OBJECT_IN_META_FIELDS, $data);
@@ -121,15 +103,12 @@ class DreamCommerceService
         return collect($dataToReturn);
     }
 
-    public function mapNewMetaFieldsValuesToIds(array $metaFieldsIds, string $websiteId, bool $substituteProduct): array
+    public function mapNewMetaFieldsValuesToIds(array $metaFieldsIds, string $websiteId): array
     {
         $mappedMetaFields = [];
         foreach ($metaFieldsIds as $key => $metaFieldsId) {
             if ($key === DreamCommerceService::NAME_FOR_META_FIELD_WEBSITE_ID) {
                 $mappedMetaFields[$metaFieldsId] = $websiteId;
-            }
-            if ($key === DreamCommerceService::NAME_FOR_META_FIELD_SUBSTITUTE_PRODUCT) {
-                $mappedMetaFields[$metaFieldsId] = $substituteProduct;
             }
         }
 

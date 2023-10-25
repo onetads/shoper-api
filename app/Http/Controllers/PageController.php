@@ -23,19 +23,17 @@ class PageController extends Controller
             $dreamCommerceService = new DreamCommerceService($shop->shop_url, $shopAccessToken, $shop);
             $metaFields = $dreamCommerceService->getMetaFields();
             $websiteId = $metaFields->get(DreamCommerceService::NAME_FOR_META_FIELD_WEBSITE_ID);
-            $substituteProduct = (bool) $metaFields->get(DreamCommerceService::NAME_FOR_META_FIELD_SUBSTITUTE_PRODUCT);
         } catch (DreamCommerceException $e) {
             return \response($e->getMessage(), 500);
         }
 
-        return \view('configure', ['shop' => $shop, 'website_id' => $websiteId, 'substitute_product' => $substituteProduct]);
+        return \view('configure', ['shop' => $shop, 'website_id' => $websiteId]);
     }
 
     public function save(ConfigureShopRequest $request): Response | RedirectResponse
     {
         $externalShopId = $request->get('shop_external_id');
         $websiteId = $request->get('website_id');
-        $substituteProduct = (bool)$request->get('substitute_product');
 
         /** @var Shop $shop */
         $shop = Shop::where('shop', '=', $externalShopId)->firstOrFail();
@@ -45,7 +43,6 @@ class PageController extends Controller
             ['shop_id' => $shop->id],
             [
                 'website_id' => $websiteId,
-                'substitute_product' => $substituteProduct
             ]
         );
 
@@ -59,14 +56,12 @@ class PageController extends Controller
             if (!$dreamCommerceService->checkMetaFieldsExists()) {
                 $dreamCommerceService->createMetaFields(
                     $websiteId,
-                    $substituteProduct
                 );
             } else {
                 $metaFieldsIds = $dreamCommerceService->getMetaFields(true)->toArray();
                 $mappedMetaFieldsValues = $dreamCommerceService->mapNewMetaFieldsValuesToIds(
                     $metaFieldsIds,
                     $websiteId,
-                    $substituteProduct
                 );
 
                 $dreamCommerceService->updateMetaFieldsValues($mappedMetaFieldsValues);

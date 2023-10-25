@@ -16,7 +16,6 @@ class ConfigureShopRequest extends FormRequest
         return [
             'website_id' => ['required', 'string', 'max:128'],
             'shop_external_id' => ['required', 'string', 'exists:shops,shop'],
-            'substitute_product' => ['sometimes', 'boolean'],
         ];
     }
 }

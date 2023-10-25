@@ -9,11 +9,6 @@
                 </label>
                 <input type="hidden" value="{{$shop->shop}}" name="shop_external_id">
                 <br>
-                <label for="substitute_product">
-                    Podmieniać produkt?
-                    <input type="checkbox" id="substitute_product" name="substitute_product"
-                           @if($substitute_product) checked @endif>
-                </label>
                 <input type="submit">
                 @if($errors->any())
                     <div style="background-color: red;">
