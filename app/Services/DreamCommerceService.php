@@ -145,7 +145,7 @@ class DreamCommerceService
                     'value' => $metaFieldsValue
                 ];
 
-                $metaFieldValue->put($metaFieldId, [self::NAME_FOR_OBJECT_IN_META_FIELDS, $data]);
+                $metaFieldValue->put($metaFieldId, $data);
             }
         } catch (\Exception $e) {
             Log::channel('dreamcommerce')->error($e->getMessage());
