@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\DreamCommerceException;
+use App\Http\Requests\ConfigureShopIndexRequest;
 use App\Http\Requests\ConfigureShopRequest;
 use App\Models\Shop;
 use App\Models\ShopConfiguration;
@@ -14,7 +15,7 @@ use Illuminate\View\View;
 
 class PageController extends Controller
 {
-    public function index(Request $request): View|Response
+    public function index(ConfigureShopIndexRequest $request): View|Response
     {
         /** @var Shop $shop */
         $shop = Shop::where('shop', '=', $request->get('shop'))->first();

@@ -21,6 +21,7 @@ class DreamCommerceService
 
     protected Client $client;
     private const ACCESS_TOKEN_RENEW_DIFF_IN_DAYS = 1;
+    private const ALGORITHM_NAME_TO_HASH = 'sha512';
     private const NAME_SPACE_FOR_ONET_ADS = 'OnetAds';
     private const NAME_FOR_OBJECT_IN_META_FIELDS = 'system';
     public const NAME_FOR_META_FIELD_WEBSITE_ID = 'website_id';
@@ -153,5 +154,19 @@ class DreamCommerceService
         ]);
 
         $accessToken->save();
+    }
+
+
+    public function checkHash(string $hash, array $dataToCheck): bool
+    {
+        ksort($dataToCheck);
+        $hashArray = [];
+        foreach ($dataToCheck as $key=>$value) {
+            $hashArray[] = "$key=$value";
+        }
+        $hashFromData = implode("&", $hashArray);
+        $hashFromData = hash_hmac(self::ALGORITHM_NAME_TO_HASH, $hashFromData, config('app-store.appstore_secret'));
+
+        return hash_equals($hash, $hashFromData);
     }
 }
