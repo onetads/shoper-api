@@ -95,7 +95,7 @@ class DreamCommerceService
         }
     }
 
-    public function getMetaFields(): Collection
+    public function getMetaFields(?bool $onlyIds = false): Collection
     {
         $namespace = self::NAME_SPACE_FOR_ONET_ADS;
 
@@ -114,11 +114,48 @@ class DreamCommerceService
             });
 
             if ($matchingItem) {
-                $dataToReturn[$key] = $matchingItem['value'];
+                $dataToReturn[$key] = $onlyIds ? $matchingItem['value_id'] : $matchingItem['value'];
             }
         }
 
         return collect($dataToReturn);
+    }
+
+    public function mapNewMetaFieldsValuesToIds(array $metaFieldsIds, string $websiteId, bool $substituteProduct): array
+    {
+        $mappedMetaFields = [];
+        foreach ($metaFieldsIds as $key => $metaFieldsId) {
+            if ($key === DreamCommerceService::NAME_FOR_META_FIELD_WEBSITE_ID) {
+                $mappedMetaFields[$metaFieldsId] = $websiteId;
+            }
+            if ($key === DreamCommerceService::NAME_FOR_META_FIELD_SUBSTITUTE_PRODUCT) {
+                $mappedMetaFields[$metaFieldsId] = $substituteProduct;
+            }
+        }
+
+        return $mappedMetaFields;
+    }
+
+    public function updateMetaFieldsValues(array $metaFieldsValues): void
+    {
+        try {
+            foreach ($metaFieldsValues as $metaFieldId => $metaFieldsValue) {
+                $metaFieldValue = new MetafieldValue($this->client);
+                $data = [
+                    'value' => $metaFieldsValue
+                ];
+
+                $metaFieldValue->put($metaFieldId, [self::NAME_FOR_OBJECT_IN_META_FIELDS, $data]);
+            }
+        } catch (\Exception $e) {
+            Log::channel('dreamcommerce')->error($e->getMessage());
+            throw new DreamCommerceException($e->getMessage());
+        }
+    }
+
+    public function checkMetaFieldsExists(): bool
+    {
+        return $this->getMetaFields()->count() !== 0;
     }
 
     public function refreshToken(Shop $shop): void
