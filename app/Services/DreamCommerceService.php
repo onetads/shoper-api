@@ -139,8 +139,7 @@ class DreamCommerceService
     public function updateMetaFieldsValues(array $metaFieldsValues): void
     {
         try {
-
-            foreach ($metaFieldsValues as $metaFieldId=>$metaFieldsValue) {
+            foreach ($metaFieldsValues as $metaFieldId => $metaFieldsValue) {
                 $metaFieldValue = new MetafieldValue($this->client);
                 $data = [
                     'value' => $metaFieldsValue
@@ -148,7 +147,6 @@ class DreamCommerceService
 
                 $metaFieldValue->put($metaFieldId, [self::NAME_FOR_OBJECT_IN_META_FIELDS, $data]);
             }
-
         } catch (\Exception $e) {
             Log::channel('dreamcommerce')->error($e->getMessage());
             throw new DreamCommerceException($e->getMessage());
