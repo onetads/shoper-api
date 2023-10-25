@@ -77,7 +77,7 @@ class DreamCommerceService
         }
     }
 
-    public function getMetaFields(?bool $onlyIds = false): Collection
+    public function getMetaFields(?bool $onlyMetaFieldsValuesIds = false, ?bool $onlyMetaFieldsIds = false): Collection
     {
         $namespace = self::NAME_SPACE_FOR_ONET_ADS;
 
@@ -85,6 +85,10 @@ class DreamCommerceService
         $metaFieldsData = collect($metaFields)->mapWithKeys(function ($metaField) {
             return [$metaField['key'] => $metaField['metafield_id']];
         });
+
+        if ($onlyMetaFieldsIds) {
+            return collect($metaFieldsData);
+        }
 
         $metaFieldValues = (new MetafieldValue($this->client))->filters(['metafield_id' => $metaFieldsData])->get('system', 'all');
         $metaFieldsValuesCollection = collect($metaFieldValues)->get('list');
@@ -96,7 +100,7 @@ class DreamCommerceService
             });
 
             if ($matchingItem) {
-                $dataToReturn[$key] = $onlyIds ? $matchingItem['value_id'] : $matchingItem['value'];
+                $dataToReturn[$key] = $onlyMetaFieldsValuesIds ? $matchingItem['value_id'] : $matchingItem['value'];
             }
         }
 
@@ -153,5 +157,19 @@ class DreamCommerceService
         ]);
 
         $accessToken->save();
+    }
+
+    public function deleteMetaFields(): void
+    {
+        $metaFieldsIds = $this->getMetaFields(onlyMetaFieldsIds: true);
+        foreach ($metaFieldsIds as $metaFieldId) {
+            $metaField = new Metafield($this->client);
+            try {
+                $metaField->delete(self::NAME_FOR_OBJECT_IN_META_FIELDS, $metaFieldId);
+            } catch (\Exception $e) {
+                Log::channel('dreamcommerce')->error($e->getMessage());
+                throw new DreamCommerceException($e->getMessage());
+            }
+        }
     }
 }
