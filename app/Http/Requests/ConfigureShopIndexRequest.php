@@ -23,16 +23,11 @@ class ConfigureShopIndexRequest extends FormRequest
     public function rules(): array
     {
         //from docs: https://developers.shoper.pl/developers/appstore/shop-integration/iframes
-        $dataToCheck = [
-            'place' => $this->get('place'),
-            'shop' => $this->get('shop'),
-            'timestamp' => $this->get('timestamp')
-        ];
         return [
             'shop' => ['required', 'string', 'exists:shops,shop'],
             'timestamp' => ['sometimes'],
             'place' => ['sometimes', 'string'],
-            'hash' => ['sometimes', 'string', new CheckHashValidationRule($dataToCheck)]
+            'hash' => ['sometimes', 'string', new CheckHashValidationRule($this->only(['place', 'shop', 'timestamp']))]
         ];
     }
 }

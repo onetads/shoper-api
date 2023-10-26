@@ -157,7 +157,7 @@ class DreamCommerceService
     }
 
 
-    public function checkHash(string $hash, array $dataToCheck): bool
+    public static function checkHash(string $hash, array $dataToCheck): bool
     {
         ksort($dataToCheck);
         $hashArray = [];
