@@ -23,7 +23,6 @@ class PageController extends Controller
             $dreamCommerceService = new DreamCommerceService($shop->shop_url, $shopAccessToken, $shop);
             $metaFields = $dreamCommerceService->getMetaFields();
             $websiteId = $metaFields->get(DreamCommerceService::NAME_FOR_META_FIELD_WEBSITE_ID);
-            $dreamCommerceService->deleteMetafields();
         } catch (DreamCommerceException $e) {
             return \response($e->getMessage(), 500);
         }
