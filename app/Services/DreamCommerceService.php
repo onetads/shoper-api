@@ -181,7 +181,7 @@ class DreamCommerceService
         foreach ($dataToCheck as $key=>$value) {
             $hashArray[] = "$key=$value";
         }
-        $hashFromData = implode("&", $hashArray);
+        $hashFromData = implode('&', $hashArray);
         $hashFromData = hash_hmac(self::ALGORITHM_NAME_TO_HASH, $hashFromData, config('app-store.appstore_secret'));
 
         return hash_equals($hash, $hashFromData);
