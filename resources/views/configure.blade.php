@@ -1,7 +1,8 @@
 @extends('layouts/app')
 @section('content')
-    <div>
+    <div style="text-align: center;">
         <div>
+            <h3>Skonfiguruj website id dla sklepu: {{$shop->shop_url}}</h3>
             <form action="{{route('configure.save')}}" method="post">
                 <label for="website_id">
                     WebsiteId
@@ -9,7 +10,7 @@
                 </label>
                 <input type="hidden" value="{{$shop->shop}}" name="shop_external_id">
                 <br>
-                <input type="submit">
+                <input type="submit" value="Zapisz">
                 @if($errors->any())
                     <div style="background-color: red;">
                         <ul>
