@@ -24,7 +24,6 @@ class DreamCommerceService
     private static array $statusesInactive = ['inactive', 'deactivated'];
     private const STATUS_ACTIVE = 'active';
 
-    private const SHOP_ERROR = -1;
     private const SHOP_DOESNT_EXISTS = 0;
     private const SHOP_IS_INACTIVE = 1;
     private const SHOP_IS_ACTIVE = 2;
@@ -119,7 +118,7 @@ class DreamCommerceService
             return self::SHOP_IS_ACTIVE;
         }
 
-        return self::SHOP_ERROR;
+        return self::SHOP_DOESNT_EXISTS;
     }
 
     private static function shopDoesntExists(\stdClass $data): bool
@@ -129,7 +128,7 @@ class DreamCommerceService
         }
 
         foreach ($data->tags->page_context as $item) {
-            if ($item->data->tplCode === self::TPL_CODE_IF_NOT_EXISTS_OR_INACTIVE) {
+            if ($item->data->tplCode !== self::TPL_CODE_IF_NOT_EXISTS_OR_INACTIVE) {
                 return true;
             }
         }
