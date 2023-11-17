@@ -17,11 +17,6 @@ class Shop extends Model
         'installed'
     ];
 
-    public function configuration(): HasOne
-    {
-        return $this->hasOne(ShopConfiguration::class, 'shop_id');
-    }
-
     public function access_token(): HasOne
     {
         return $this->hasOne(AccessToken::class, 'shop_id');
