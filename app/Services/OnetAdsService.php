@@ -14,9 +14,9 @@ class OnetAdsService
     private const STATUSES_INACTIVE = ['inactive', 'deactivated'];
     private const STATUS_ACTIVE = 'active';
 
-    private const SHOP_DOESNT_EXISTS = 0;
-    private const SHOP_IS_INACTIVE = 1;
-    private const SHOP_IS_ACTIVE = 2;
+    public const SHOP_DOESNT_EXISTS = 0;
+    public const SHOP_IS_INACTIVE = 1;
+    public const SHOP_IS_ACTIVE = 2;
 
     public function __construct(public Shop $shop)
     {
