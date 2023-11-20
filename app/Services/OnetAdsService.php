@@ -9,9 +9,9 @@ use Illuminate\Support\Str;
 class OnetAdsService
 {
     private const ONET_API_URL = 'https://csr.onet.pl/1551662/tags';
-    private static array $itemsToRemoveFromShopDomain = ['https://', 'http://', '/'];
-    private const TPL_CODE_IF_NOT_EXISTS_OR_INACTIVE = 'lps/RMN';
-    private static array $statusesInactive = ['inactive', 'deactivated'];
+    private const ITEMS_TO_REMOVE_FROM_SHOP_DOMAIN = ['https://', 'http://', '/'];
+    private const RMN_TPL_CODE = 'lps/RMN';
+    private const STATUSES_INACTIVE = ['inactive', 'deactivated'];
     private const STATUS_ACTIVE = 'active';
 
     private const SHOP_DOESNT_EXISTS = 0;
@@ -24,7 +24,7 @@ class OnetAdsService
 
     public function onetAdsStatus(): int
     {
-        $domain = Str::replace(self::$itemsToRemoveFromShopDomain, '', $this->shop->shop_url);
+        $domain = Str::replace(self::ITEMS_TO_REMOVE_FROM_SHOP_DOMAIN, '', $this->shop->shop_url);
         $formattedDomain = self::formatDomainForOnetAds($domain);
         $response = Http::get(self::ONET_API_URL, [
             'domain' => $domain,
@@ -66,7 +66,7 @@ class OnetAdsService
         }
 
         foreach ($data->tags->page_context as $item) {
-            if ($item->data->tplCode !== self::TPL_CODE_IF_NOT_EXISTS_OR_INACTIVE) {
+            if ($item->data->tplCode !== self::RMN_TPL_CODE) {
                 return true;
             }
         }
@@ -77,8 +77,8 @@ class OnetAdsService
     private static function shopIsInactive(\stdClass $data): bool
     {
         foreach ($data->tags->page_context as $item) {
-            if ($item->data->tplCode === self::TPL_CODE_IF_NOT_EXISTS_OR_INACTIVE
-                && in_array($item->data->fields->status, self::$statusesInactive)
+            if ($item->data->tplCode === self::RMN_TPL_CODE
+                && in_array($item->data->fields->status, self::STATUSES_INACTIVE)
             ) {
                 return true;
             }
@@ -89,7 +89,7 @@ class OnetAdsService
     private static function shopIsActive(\stdClass $data): bool
     {
         foreach ($data->tags->page_context as $item) {
-            if ($item->data->tplCode === self::TPL_CODE_IF_NOT_EXISTS_OR_INACTIVE
+            if ($item->data->tplCode === self::RMN_TPL_CODE
                 && $item->data->tplCode->status === self::STATUS_ACTIVE) {
                 return true;
             }
