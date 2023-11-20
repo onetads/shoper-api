@@ -7,13 +7,7 @@ use App\Models\AccessToken;
 use App\Models\Shop;
 use DreamCommerce\Client;
 use DreamCommerce\Exception\ClientException;
-use DreamCommerce\Exception\HandlerException;
-use DreamCommerce\Exception\ResourceException;
-use DreamCommerce\Handler;
-use DreamCommerce\Resource\Metafield;
-use DreamCommerce\Resource\MetafieldValue;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class DreamCommerceService
