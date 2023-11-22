@@ -19,7 +19,7 @@
 
         <img src="{{asset('assets/images/gate_two.svg')}}" alt="Logo"/>
 
-        <button onclick="window.location='https://konto.onet.pl/signin'">
+        <button onclick="window.open('https://konto.onet.pl/signin')">
             <img src="{{asset('assets/icons/send.svg')}}" alt="Send icon"/>
             Przejdź do Onet Ads
         </button>
