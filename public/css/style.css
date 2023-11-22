@@ -75,3 +75,7 @@ hr {
     border: transparent;
     margin-top: 1.6rem;
 }
+
+h1, p {
+    color: #212121;
+}
