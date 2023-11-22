@@ -1,6 +1,6 @@
 @extends('layouts/app')
 @push('css')
-    <link rel="stylesheet" href="{{asset('css/thanks.css')}}">
+    <link rel="stylesheet" href="{{asset('css/active.css')}}">
 @endpush
 @section('content')
     <div>
