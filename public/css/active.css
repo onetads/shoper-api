@@ -61,10 +61,6 @@ hr {
 }
 
 @media only screen and (max-width: 600px) {
-    body {
-        padding: 1rem 1.6rem 1.6rem 1rem;
-    }
-
     .main-content img {
         max-width: 100%;
         height: auto;
