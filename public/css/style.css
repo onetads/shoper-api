@@ -55,3 +55,15 @@ html {
     font-weight: 400;
     font-size: 1.2rem;
 }
+
+body {
+    padding: 4rem 8rem 8rem 8rem;
+    display: flex;
+    flex-direction: column;
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        padding: 1rem 1.6rem 1.6rem 1rem;
+    }
+}

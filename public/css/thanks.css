@@ -1,7 +1,4 @@
 body {
-    padding: 4rem 8rem 8rem 8rem;
-    display: flex;
-    flex-direction: column;
     justify-content: flex-start;
     min-height: 100vh;
 }
@@ -64,10 +61,6 @@ hr {
 }
 
 @media only screen and (max-width: 600px) {
-    body {
-        padding: 1rem 1.6rem 1.6rem 1rem;
-    }
-
     .main-content img {
         max-width: 100%;
         height: auto;
