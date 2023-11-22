@@ -1,6 +1,6 @@
 @extends('layouts/app')
 @push('css')
-    <link rel="stylesheet" href="{{asset('css/active.css')}}">
+    <link rel="stylesheet" href="{{asset('css/thanks.css')}}">
 @endpush
 @section('content')
     <div>
@@ -11,11 +11,11 @@
 
     <div class="main-content shadow">
         <h1>
-            Jesteś już zarejestrowany w <br/>
+            Dziękujemy za zainteresowanie <br/>
             Retail Media Network
         </h1>
 
-        <p>Swoją obecnością w RMN zarządzisz w panelu Onet Ads</p>
+        <p>Wszystkie szczegóły na temat integracji i swojej obecności w RMN znajdziesz w panelu Onet Ads</p>
 
         <img src="{{asset('assets/images/gate_two.svg')}}" alt="Logo"/>
 
