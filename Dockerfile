@@ -11,10 +11,11 @@ RUN apt-get -y install --fix-missing apt-utils dpkg build-essential \
     libcurl4 libcurl4-openssl-dev libzip-dev libmagickwand-dev libmagickwand-6.q16-6 \
     libmcrypt-dev libsqlite3-dev libsqlite3-0 mariadb-client zlib1g-dev \
     libicu-dev libonig-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
-    libxslt1-dev libxslt1.1 iproute2 libzstd1 libzstd-dev
+    libxslt1-dev libxslt1.1 iproute2 libzstd1 libzstd-dev libpq-dev
 
 RUN pecl install imagick && docker-php-ext-enable imagick && \
     pecl install redis && docker-php-ext-enable redis && \
+    docker-php-ext-install pdo_pgsql && \
     docker-php-ext-install pdo_mysql && \
     docker-php-ext-install mysqli && \
     docker-php-ext-install -j$(nproc) intl && \
