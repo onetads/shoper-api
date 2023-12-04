@@ -24,9 +24,6 @@ RUN pecl install imagick && docker-php-ext-enable imagick && \
     docker-php-ext-install -j$(nproc) gd && \
     docker-php-ext-install zip && \
     docker-php-ext-install exif && \
-    docker-php-ext-install sockets && \
-    docker-php-ext-install bcmath && \
-    docker-php-ext-install xsl && \
     docker-php-ext-install opcache && \
     docker-php-source delete
 
@@ -64,10 +61,10 @@ RUN rm /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-available/
 COPY ./docker/config/apache/default.conf /etc/apache2/sites-enabled/default.conf
 COPY ./docker/config/apache/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
 
+HEALTHCHECK  --interval=15s --timeout=5s CMD wget --no-verbose --tries=3 --spider http://localhost/api/health || exit 1
+
 ### PROD
 FROM base as prod
-
-HEALTHCHECK  --interval=15s --timeout=5s CMD wget --no-verbose --tries=3 --spider http://localhost/api/health || exit 1
 
 COPY . /var/www/html
 COPY ./docker/files/robots.txt /var/www/html/public/robots.txt
