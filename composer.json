@@ -1,6 +1,7 @@
 {
     "name": "ringier-axel-springer/ras-shoper-plugin",
     "type": "project",
+    "version": "1.0.0",
     "description": "Ringier Axel Springer Shoper plugin by Fingoweb",
     "keywords": [
         "ecommerce",
