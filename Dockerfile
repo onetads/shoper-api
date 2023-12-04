@@ -67,6 +67,8 @@ COPY ./docker/config/apache/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefo
 ### PROD
 FROM base as prod
 
+HEALTHCHECK  --interval=15s --timeout=5s CMD wget --no-verbose --tries=3 --spider http://localhost/api/health || exit 1
+
 COPY . /var/www/html
 COPY ./docker/files/robots.txt /var/www/html/public/robots.txt
 WORKDIR /var/www/html
