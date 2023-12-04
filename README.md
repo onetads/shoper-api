@@ -21,3 +21,5 @@ Starting developer environment:
 ```shell
 ./start-docker-dev
 ```
+
+Project has endpoint `/api/health`
