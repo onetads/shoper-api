@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return response('RAS shoper plugin', 200);
 });
 Route::group(['prefix' => 'configure', 'controller' => PageController::class], function () {
     Route::get('/', 'index')->name('configure.index');
