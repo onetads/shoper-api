@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\DreamCommerceException;
 use App\Models\AccessToken;
 use App\Models\Shop;
-use App\Services\DreamCommerceService;
 use DreamCommerce\Client;
 use DreamCommerce\Exception\HandlerException;
 use DreamCommerce\Handler;
@@ -151,12 +149,6 @@ class BillingSystemController extends Controller
                 ->firstOrFail();
 
             $shop->update(['installed' => false]);
-            $dreamCommerceService = new DreamCommerceService(
-                $shop->shop_url,
-                $shop->access_token()->first()->access_token,
-                $shop
-            );
-            $dreamCommerceService->deleteMetaFields();
 
             $shop->access_token()->delete();
         } catch (\Exception $e) {
