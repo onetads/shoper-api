@@ -12,17 +12,16 @@ use Illuminate\Support\Facades\Log;
 
 class DreamCommerceService
 {
-
     protected Client $client;
     private const ACCESS_TOKEN_RENEW_DIFF_IN_DAYS = 1;
     private const ALGORITHM_NAME_TO_HASH = 'sha512';
 
     public function __construct(
-        string $entryPoint,
-        string $accessToken,
         protected ?Shop $shop = null
     )
     {
+        $entryPoint = $shop->shop_url;
+        $accessToken = $shop->access_token()->first()->access_token;
         try {
             $this->client = new Client(
                 $entryPoint,
