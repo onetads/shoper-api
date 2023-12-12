@@ -38,6 +38,7 @@ class OnetAdsService
 
     private static function formatDomainForOnetAds(string $domain): string
     {
+        $domain = str_replace('www.', '', $domain);
         return preg_replace('/[^\w-]+/', '_', $domain);
     }
 
