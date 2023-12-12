@@ -65,18 +65,14 @@ class OnetAdsService
             return true;
         }
 
-        $countOfRmnTags = 0;
+        $rmnTagsExists = false;
         foreach ($data->tags->page_context as $item) {
             if ($item->data->tplCode === self::RMN_TPL_CODE) {
-                $countOfRmnTags++;
+                $rmnTagsExists = true;
             }
         }
 
-        if ($countOfRmnTags === 0) {
-            return true;
-        }
-
-        return false;
+        return !$rmnTagsExists;
     }
 
     private static function shopIsInactive(\stdClass $data): bool
