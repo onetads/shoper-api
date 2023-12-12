@@ -65,10 +65,15 @@ class OnetAdsService
             return true;
         }
 
+        $countOfRmnTags = 0;
         foreach ($data->tags->page_context as $item) {
-            if ($item->data->tplCode !== self::RMN_TPL_CODE) {
-                return true;
+            if ($item->data->tplCode === self::RMN_TPL_CODE) {
+                $countOfRmnTags++;
             }
+        }
+
+        if ($countOfRmnTags === 0) {
+            return true;
         }
 
         return false;
