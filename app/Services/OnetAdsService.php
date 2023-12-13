@@ -38,6 +38,7 @@ class OnetAdsService
 
     private static function formatDomainForOnetAds(string $domain): string
     {
+        $domain = str_replace('www.', '', $domain);
         return preg_replace('/[^\w-]+/', '_', $domain);
     }
 
@@ -65,13 +66,14 @@ class OnetAdsService
             return true;
         }
 
+        $rmnTagsExists = false;
         foreach ($data->tags->page_context as $item) {
-            if ($item->data->tplCode !== self::RMN_TPL_CODE) {
-                return true;
+            if ($item->data->tplCode === self::RMN_TPL_CODE) {
+                $rmnTagsExists = true;
             }
         }
 
-        return false;
+        return !$rmnTagsExists;
     }
 
     private static function shopIsInactive(\stdClass $data): bool
