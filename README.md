@@ -31,5 +31,6 @@ Setup:
   * APP_KEY (two ways)
     * Generate it with command ```php artisan key:generate``` from the container
     * Generate it manually, using the command ```shuf -er -n32 {a..z} {0..9} | tr -d '\n' | base64 ``` then change the ```APP_KEY=``` line to ```APP_KEY=base64:key``` where ```key``` is the output from the above command
-
+  * Run the migrations with command ```php artisan migrate --force```
+  
 Project has endpoint ```/api/health``` which can be used for healthchecks
