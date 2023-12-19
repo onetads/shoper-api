@@ -19,7 +19,7 @@
                 producentami.
             </p>
 
-            <button onclick="openLinks('{{route('onetads.thanks')}}', 'https://konto.onet.pl/signin')">
+            <button onclick="openLinks('{{route('onetads.thanks')}}', 'https://panel.onetads.pl/')">
                 <img src="{{asset('assets/icons/send_black.svg')}}" alt="Send icon"/>
                 Dołącz do RMN - przejdź do Onet Ads
             </button>
@@ -122,7 +122,7 @@
                 w Onet Ads
             </h1>
 
-            <button onclick="openLinks('{{route('onetads.thanks')}}', 'https://konto.onet.pl/signin')">
+            <button onclick="openLinks('{{route('onetads.thanks')}}', 'https://panel.onetads.pl/')">
                 <img src="{{asset('assets/icons/send_black.svg')}}" alt="Send icon"/>
                 Zaloguj się do panelu
             </button>
