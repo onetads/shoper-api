@@ -92,7 +92,7 @@ class OnetAdsService
     {
         foreach ($data->tags->page_context as $item) {
             if ($item->data->tplCode === self::RMN_TPL_CODE
-                && $item->data->tplCode->status === self::STATUS_ACTIVE) {
+                && $item->data->fields->status === self::STATUS_ACTIVE) {
                 return true;
             }
         }
